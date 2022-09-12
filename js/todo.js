@@ -10,18 +10,23 @@ function saveTodos(){
 }
 
 function deleteTodo(event){
-    const li = event.target.parentElement; //event, console.dir, find parentElement which is li
-    li.remove();        //each button has different parent = li
+    const li = event.target.parentElement;
+    li.remove();
+    console.log(li.id);
+    toDos = toDos.filter((toDo) => toDo.id !== parseInt(li.id));
+    saveTodos();
 }
 
 
 // add new todo to the list
 function paintTodo(newTodo){
     const li = document.createElement("li");    //creat <li></li>
+    li.id = newTodo.id;
     const span = document.createElement("span");
-    span.innerText = newTodo;                   // value between span
+    span.innerText = newTodo.text; // value between span
     const button = document.createElement("button");
     button.innerText = "❌";
+    button.id = newTodo.id;
     button.addEventListener("click", deleteTodo);
     li.appendChild(span);                       //put span in li
     li.appendChild(button);                     // button to list
@@ -32,24 +37,22 @@ function handleToDoSubmit(event){
     event.preventDefault();
     const newTodo = toDoInput.value;    // save current value
     toDoInput.value = "";  //clear
-    toDos.push(newTodo);
+    const newTodoObj = {
+        text: newTodo,
+        id: Date.now(),
+    }
+    toDos.push(newTodoObj);
+    paintTodo(newTodoObj);
     saveTodos();             
-    paintTodo(newTodo);
     
 }
 
 toDoForm.addEventListener("submit", handleToDoSubmit);
-
-// function sayHello(item){
-//     console.log("this is the turn of", item);
-// }
 
 const saveToDos = localStorage.getItem(TODOS_KEY);
 
 if (saveToDos) {
     const parsedToDos = JSON.parse(saveToDos); //JSON to array
     toDos = parsedToDos;
-    // parsedToDos.forEach(sayHello);
-    // parsedToDos.forEach((item) => console.log("This is the turn of", item)); //samething but fancy
     parsedToDos.forEach(paintTodo);
 }
