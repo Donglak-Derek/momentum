@@ -3,7 +3,7 @@ const toDoInput = document.querySelector("#todo-form input");
 const toDoList = document.getElementById("todo-list");
 
 const TODOS_KEY = "toDos"
-const toDos = [];
+let toDos = [];
 
 function saveTodos(){
     localStorage.setItem(TODOS_KEY, JSON.stringify(toDos)); //make them array!
@@ -48,8 +48,8 @@ const saveToDos = localStorage.getItem(TODOS_KEY);
 
 if (saveToDos) {
     const parsedToDos = JSON.parse(saveToDos); //JSON to array
-    console.log(parsedToDos);
+    toDos = parsedToDos;
     // parsedToDos.forEach(sayHello);
-    parsedToDos.forEach((item) => console.log("This is the turn of", item));
-    
+    // parsedToDos.forEach((item) => console.log("This is the turn of", item)); //samething but fancy
+    parsedToDos.forEach(paintTodo);
 }
